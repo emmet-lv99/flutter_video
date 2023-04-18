@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../component/custom_video_player.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -9,10 +11,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  XFile? video;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: renderEmpty(),
+      body: this.video == null
+          ? renderEmpty()
+          : Center(
+              child: CustomVideoPlayer(video: video!),
+            ),
     );
   }
 
@@ -35,6 +43,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void onLogoTap() async {
     final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
+    if (video != null) {
+      setState(() {
+        this.video = video;
+      });
+    }
   }
 
   BoxDecoration getBoxDecoration() {
